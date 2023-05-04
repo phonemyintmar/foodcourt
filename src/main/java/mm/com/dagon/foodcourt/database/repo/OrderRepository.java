@@ -12,9 +12,9 @@ public interface OrderRepository extends MongoRepository<Order, String> {
 
     Page<Order> findByStudentId(String shopId, Pageable pageable);
 
-    Page<Order> findByShopIdAndStudentIdAndCreatedDateBetween(String shopId, String studentId, LocalDateTime fromTime, LocalDateTime toTime, Pageable pageable);
+    Page<Order> findByShopIdAndStudentIdAndCreatedAtBetween(String shopId, String studentId, LocalDateTime fromTime, LocalDateTime toTime, Pageable pageable);
 
-    Page<Order> findByShopIdAndStatusIn(String shopId, List<String> status);
+    Page<Order> findByShopIdAndStatusIn(String shopId, List<String> status, Pageable pageable);
 
 
 }

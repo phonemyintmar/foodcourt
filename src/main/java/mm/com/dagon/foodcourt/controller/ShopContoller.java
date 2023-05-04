@@ -101,8 +101,8 @@ public class ShopContoller {
     }
 
     @GetMapping("/getUnfinished/{id}")
-    public ResponseEntity<?> getUnfinishedOrders(@PathVariable String id) {
-        return orderService.getUnfinishedOrders(id);
+    public ResponseEntity<?> getUnfinishedOrders(@PathVariable String id, @PageableDefault Pageable pageable) {
+        return orderService.getUnfinishedOrders(id, pageable);
     }
 
     //dr myo twy so yin ll authentication sit thint instead of letting an orderId changing status

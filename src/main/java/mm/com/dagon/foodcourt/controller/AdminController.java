@@ -37,53 +37,53 @@ public class AdminController {
 
 
     // Student CRUD
-    @PostMapping("/create")
+    @PostMapping("student/create")
     public ResponseEntity<?> createStudent(@RequestBody @Valid StudentCreateDTO studentCreateDTO) {
         return studentService.createStudent(studentCreateDTO);
     }
 
-    @GetMapping("/list")
+    @GetMapping("student/list")
     public ResponseEntity<?> getStudentList() {
         return studentService.getAllStudents();
     }
 
-    @GetMapping("/details/{id}")
+    @GetMapping("student/details/{id}")
     public ResponseEntity<?> getStudentDetail(@PathVariable String id) {
         return studentService.getStudentById(id);
     }
 
-    @PostMapping("/update/{id}")
+    @PostMapping("student/update/{id}")
     public ResponseEntity<?> updateStudent(@PathVariable String id, @RequestBody @Valid StudentUpdateDTO updateDTO) throws Exception {
         return studentService.updateStudent(id, updateDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("student/delete/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable String id) {
         return studentService.deleteStudent(id);
     }
 
     //    Shop CRUD
-    @PostMapping("/create")
+    @PostMapping("shop/create")
     public ResponseEntity<?> createShop(@RequestBody @Valid ShopCreateDTO createDto) {
         return shopService.createShop(createDto);
     }
 
-    @GetMapping("/list")
+    @GetMapping("shop/list")
     public ResponseEntity<?> getShopList() {
         return shopService.getAllShops();
     }
 
-    @GetMapping("/details/{id}")
+    @GetMapping("shop/details/{id}")
     public ResponseEntity<?> getShopDetail(@PathVariable String id) {
         return shopService.getShopById(id);
     }
 
-    @PostMapping("/update/{id}")
+    @PostMapping("shop/update/{id}")
     public ResponseEntity<?> updateShop(@PathVariable String id, @RequestBody @Valid ShopUpdateDTO updateDTO) throws Exception {
         return shopService.updateShop(id, updateDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("shop/delete/{id}")
     public ResponseEntity<?> deleteShop(@PathVariable String id) {
         return shopService.deleteShop(id);
     }

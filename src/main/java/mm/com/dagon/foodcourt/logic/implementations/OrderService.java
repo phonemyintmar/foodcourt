@@ -65,7 +65,7 @@ public class OrderService implements IOrderService {
     @Override
     public ResponseEntity<?> getOrdersFilteredForShop(LocalDateTime fromTime, LocalDateTime toTime, String shopId, String studentId, Pageable pageable) {
         try {
-            Page<Order> ordersPage = orderRepository.findByShopIdAndStudentIdAndCreatedDateBetween(shopId, studentId, fromTime, toTime, pageable);
+            Page<Order> ordersPage = orderRepository.findByShopIdAndStudentIdAndCreatedAtBetween(shopId, studentId, fromTime, toTime, pageable);
             Page<OrderListForShopDTO> page = ordersPage.map(order -> modelMapper.map(order, OrderListForShopDTO.class));
             return onSuccessWithMessage(page, "000", "Orders for shops fetched");
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class OrderService implements IOrderService {
     @Override
     public ResponseEntity<?> getOrdersFiltered(LocalDateTime fromTime, LocalDateTime toTime, String shopId, String studentId, Pageable pageable) {
         try {
-            Page<Order> ordersPage = orderRepository.findByShopIdAndStudentIdAndCreatedDateBetween(shopId, studentId, fromTime, toTime, pageable);
+            Page<Order> ordersPage = orderRepository.findByShopIdAndStudentIdAndCreatedAtBetween(shopId, studentId, fromTime, toTime, pageable);
             return onSuccessWithMessage(ordersPage, "000", "Orders for shops fetched");
         } catch (Exception e) {
             return onFailWithMessage("122", e.getMessage());
@@ -84,9 +84,13 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public ResponseEntity<?> getUnfinishedOrders(String shopId) {
+    public ResponseEntity<?> getUnfinishedOrders(String shopId, Pageable pageable) {
         try {
-            Page<Order> unfinishedOrdersPage = orderRepository.findByShopIdAndStatusIn(shopId, List.of(Status.PENDING.name(), Status.SENDING.name(), Status.PREPARING.name()));
+            Page<Order> unfinishedOrdersPage = orderRepository.findByShopIdAndStatusIn(
+                    shopId,
+                    List.of(Status.PENDING.name(), Status.SENDING.name(), Status.PREPARING.name()),
+                    pageable
+            );
             Page<OrderListForShopDTO> page = unfinishedOrdersPage.map(order -> modelMapper.map(order, OrderListForShopDTO.class));
             return onSuccessWithMessage(page, "000", "Orders for shops fetched");
         } catch (Exception e) {

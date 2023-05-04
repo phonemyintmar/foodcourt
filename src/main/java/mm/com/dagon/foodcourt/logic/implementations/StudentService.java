@@ -35,7 +35,6 @@ public class StudentService implements IStudentService {
         this.modelMapper = modelMapper;
     }
 
-
     @Override
     public ResponseEntity<?> createStudent(StudentCreateDTO createDTO) {
         try {

@@ -17,7 +17,7 @@ public interface IOrderService {
     ResponseEntity<?> getOrdersFilteredForShop(LocalDateTime fromTime, LocalDateTime toTime, String shopId, String studentId, Pageable pageable);
     ResponseEntity<?> getOrdersFiltered(LocalDateTime fromTime, LocalDateTime toTime, String shopId, String studentId, Pageable pageable);
 
-    ResponseEntity<?> getUnfinishedOrders(String shopId);
+    ResponseEntity<?> getUnfinishedOrders(String shopId, Pageable pageable);
 
     ResponseEntity<?> changeOrderStatus(String orderId, Status status);
 }
