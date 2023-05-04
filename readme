@@ -1,0 +1,7 @@
+limitations for now
+
+Can't make one single order from different shops
+most of the responses are still in list.
+some authentication permission twy ko frontend ka nay pl check htr.
+ResponseCodes are not enums and automated. Just Strings for now.
+Some responses are not DTOed just raw entity

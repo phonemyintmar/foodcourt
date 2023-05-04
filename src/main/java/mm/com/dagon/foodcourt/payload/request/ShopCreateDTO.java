@@ -7,16 +7,19 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class StudentCreateDTO {
-    @NotBlank
-    private String studentId;
+public class ShopCreateDTO {
 
     @NotBlank
-    private String roomNumber;
+    private String shopName;
 
     @NotBlank
-    private String name;
+    private String ownerName;
+
+
+    // may be other image?
+    @NotBlank
+    private String shopProfileImg;
 
     @NotBlank
-    private String phoneNumber;
+    private String phoneNo;
 }

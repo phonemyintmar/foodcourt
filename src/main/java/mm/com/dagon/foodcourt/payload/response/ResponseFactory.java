@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Component
 public class ResponseFactory {
 
-    public static ResponseEntity<?> onSuccessDefault(Object result, String code, String message) {
+    public static ResponseEntity<?> onSuccessWithMessage(Object result, String code, String message) {
         // for now just make the code string
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setResult(result);
@@ -18,7 +18,7 @@ public class ResponseFactory {
         return ResponseEntity.ok(baseResponse);
     }
 
-    public static ResponseEntity<?> onSuccessWithMessage(Object result) {
+    public static ResponseEntity<?> onSuccessDefault(Object result) {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setResult(result);
         baseResponse.setCode("000");
@@ -27,11 +27,22 @@ public class ResponseFactory {
         return ResponseEntity.ok(baseResponse);
     }
 
-    public static ResponseEntity<?> onFailWithDefault() {
-        return null;
+    public static ResponseEntity<?> onFailDefault() {
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setResponseAt(LocalDateTime.now());
+        baseResponse.setCode("199");
+        baseResponse.setMessage("The action has failed");
+        baseResponse.setResult(null);
+        return ResponseEntity.badRequest().body(baseResponse);
     }
 
-    public static ResponseEntity<?> onFailWithMessage() {
-        return null;
+    public static ResponseEntity<?> onFailWithMessage(String code, String message) {
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setResponseAt(LocalDateTime.now());
+        baseResponse.setCode(code);
+        baseResponse.setMessage(message);
+        baseResponse.setResult(null);
+        return ResponseEntity.badRequest().body(baseResponse);
+
     }
 }

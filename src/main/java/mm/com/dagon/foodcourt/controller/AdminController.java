@@ -4,24 +4,23 @@ import mm.com.dagon.foodcourt.database.model.Status;
 import mm.com.dagon.foodcourt.logic.IMenuService;
 import mm.com.dagon.foodcourt.logic.IOrderService;
 import mm.com.dagon.foodcourt.logic.IShopService;
-import mm.com.dagon.foodcourt.payload.request.MenuCreateDTO;
-import mm.com.dagon.foodcourt.payload.request.MenuUpdateDTO;
+import mm.com.dagon.foodcourt.logic.IStudentService;
+import mm.com.dagon.foodcourt.payload.request.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import mm.com.dagon.foodcourt.payload.request.ShopCreateDTO;
-import mm.com.dagon.foodcourt.payload.request.ShopUpdateDTO;
-
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
 @RestController
-//@CrossOrigin
-@RequestMapping("/shop")
-public class ShopContoller {
+@CrossOrigin
+@RequestMapping("/admin")
+public class AdminController {
+
+    private final IStudentService studentService;
 
     private final IShopService shopService;
 
@@ -29,13 +28,41 @@ public class ShopContoller {
 
     private final IOrderService orderService;
 
-    public ShopContoller(IShopService shopService, IMenuService menuService, IOrderService orderService) {
+    public AdminController(IStudentService studentService, IShopService shopService, IMenuService menuService, IOrderService orderService) {
+        this.studentService = studentService;
         this.shopService = shopService;
         this.menuService = menuService;
         this.orderService = orderService;
     }
 
 
+    // Student CRUD
+    @PostMapping("/create")
+    public ResponseEntity<?> createStudent(@RequestBody @Valid StudentCreateDTO studentCreateDTO) {
+        return studentService.createStudent(studentCreateDTO);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> getStudentList() {
+        return studentService.getAllStudents();
+    }
+
+    @GetMapping("/details/{id}")
+    public ResponseEntity<?> getStudentDetail(@PathVariable String id) {
+        return studentService.getStudentById(id);
+    }
+
+    @PostMapping("/update/{id}")
+    public ResponseEntity<?> updateStudent(@PathVariable String id, @RequestBody @Valid StudentUpdateDTO updateDTO) throws Exception {
+        return studentService.updateStudent(id, updateDTO);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteStudent(@PathVariable String id) {
+        return studentService.deleteStudent(id);
+    }
+
+    //    Shop CRUD
     @PostMapping("/create")
     public ResponseEntity<?> createShop(@RequestBody @Valid ShopCreateDTO createDto) {
         return shopService.createShop(createDto);
@@ -62,6 +89,7 @@ public class ShopContoller {
     }
 
 
+    //   Menu CRUD
     @PostMapping("/dish/create")
     //real app mhr so yin principal ka userId nae menucreateDto ka shopId nae ko sit thint tl
     public ResponseEntity<?> createDish(@RequestBody @Valid MenuCreateDTO createDto) {
@@ -69,9 +97,9 @@ public class ShopContoller {
     }
 
 
-    @GetMapping("/dish/list/{id}")
-    public ResponseEntity<?> getDishListOfShop(@PathVariable String id) {
-        return menuService.getAllMenusForOneShop(id);
+    @GetMapping("/dish/list/")
+    public ResponseEntity<?> getDishListOfShop() {
+        return menuService.getAllMenus();
     }
 
     @GetMapping("/dish/details/{id}")
@@ -91,23 +119,20 @@ public class ShopContoller {
     }
 
 
-    @GetMapping("/getOrders/{shopId}")
+    // Order manipulation by admin
+
+    @GetMapping("/getOrders")
     public ResponseEntity<?> getOrders(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime fromTime,
                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime toTime,
-                                       @PathVariable String shopId,
+                                       @RequestParam(required = false) String shop,
                                        @RequestParam(required = false) String student,
                                        @PageableDefault Pageable pageable) {
-        return orderService.getOrdersFilteredForShop(fromTime, toTime, shopId, student, pageable);
+        return orderService.getOrdersFiltered(fromTime, toTime, shop, student, pageable);
     }
 
-    @GetMapping("/getUnfinished/{id}")
-    public ResponseEntity<?> getUnfinishedOrders(@PathVariable String id) {
-        return orderService.getUnfinishedOrders(id);
-    }
-
-    //dr myo twy so yin ll authentication sit thint instead of letting an orderId changing status
-    @PutMapping("/finish/{orderId}")
-    public ResponseEntity<?> markOrderFinished(@PathVariable String orderId, @RequestParam Status status) {
+    @PutMapping("changeStatus/{orderId}")
+    public ResponseEntity<?> changeStatusOrder(@PathVariable String orderId, Status status) {
         return orderService.changeOrderStatus(orderId, status);
     }
+
 }
